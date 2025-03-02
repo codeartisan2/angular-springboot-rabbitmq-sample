@@ -12,6 +12,9 @@ export class AppComponent {
 
   sendMessage() {
     this.http.post('http://localhost:8080/api/messages', this.message, { responseType: 'text' })
-      .subscribe(response => console.log(response));
-  }
+      .subscribe({
+    next: response => console.log(response),
+    error: error => alert('Failed to send message!')
+  });
+}
 }

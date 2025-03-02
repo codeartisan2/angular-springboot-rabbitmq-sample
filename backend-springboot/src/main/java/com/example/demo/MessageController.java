@@ -12,8 +12,13 @@ public class MessageController {
     private AmqpTemplate amqpTemplate;
 
     @PostMapping
-    public String sendMessage(@RequestBody String message) {
+public ResponseEntity<String> sendMessage(@RequestBody String message) {
+    try {
         amqpTemplate.convertAndSend("testQueue", message);
-        return "Message sent to RabbitMQ: " + message;
+        return ResponseEntity.ok("Message sent to RabbitMQ: " + message);
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                             .body("Failed to send message.");
     }
+}
 }
